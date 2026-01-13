@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kai Kurusu</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0a0e14;
+            --fg: #e6e8eb;
+            --accent: #00ff9f;
+            --accent-dim: #00cc7f;
+            --border: #1a1f2e;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--fg);
+            font-family: 'JetBrains Mono', monospace;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            overflow: hidden;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(0, 255, 159, 0.03) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(0, 255, 159, 0.02) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .scanline {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(to bottom, transparent, var(--accent), transparent);
+            opacity: 0.1;
+            animation: scan 8s linear infinite;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        @keyframes scan {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(100vh); }
+        }
+
+        .container {
+            max-width: 680px;
+            width: 100%;
+            position: relative;
+            z-index: 2;
+            animation: fadeIn 1.2s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .cursor {
+            display: inline-block;
+            width: 2px;
+            height: 1.2em;
+            background: var(--accent);
+            animation: blink 1s infinite;
+            margin-left: 2px;
+            vertical-align: text-bottom;
+        }
+
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+
+        h1 {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.02em;
+            animation: slideIn 0.8s ease-out 0.2s both;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .title {
+            font-size: clamp(0.9rem, 2vw, 1.1rem);
+            color: var(--accent);
+            margin-bottom: 2rem;
+            font-weight: 400;
+            animation: slideIn 0.8s ease-out 0.4s both;
+        }
+
+        .bio {
+            font-size: clamp(0.95rem, 2vw, 1.05rem);
+            line-height: 1.7;
+            margin-bottom: 3rem;
+            color: #b4b8c5;
+            animation: slideIn 0.8s ease-out 0.6s both;
+        }
+
+        .links {
+            display: flex;
+            gap: 2rem;
+            flex-wrap: wrap;
+            animation: slideIn 0.8s ease-out 0.8s both;
+        }
+
+        .link-item {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+            color: var(--fg);
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            padding: 0.4rem 0;
+        }
+
+        .link-item::before {
+            content: '>';
+            color: var(--accent);
+            opacity: 0;
+            transform: translateX(-10px);
+            transition: all 0.3s ease;
+        }
+
+        .link-item:hover::before {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .link-item:hover {
+            color: var(--accent);
+            transform: translateX(8px);
+        }
+
+        .link-item svg {
+            width: 18px;
+            height: 18px;
+            stroke: currentColor;
+            stroke-width: 2;
+            fill: none;
+        }
+
+        .footer {
+            margin-top: 4rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border);
+            font-size: 0.85rem;
+            color: #6b7280;
+            animation: slideIn 0.8s ease-out 1s both;
+        }
+
+        @media (max-width: 640px) {
+            .links {
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
+
+        .glitch {
+            position: relative;
+        }
+
+        .glitch::before,
+        .glitch::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            opacity: 0.8;
+        }
+
+        .glitch::before {
+            animation: glitch-1 2.5s infinite;
+            color: var(--accent);
+            z-index: -1;
+        }
+
+        .glitch::after {
+            animation: glitch-2 2.5s infinite;
+            color: #ff006e;
+            z-index: -2;
+        }
+
+        @keyframes glitch-1 {
+            0%, 100% { transform: translate(0); }
+            33% { transform: translate(-2px, 2px); }
+        }
+
+        @keyframes glitch-2 {
+            0%, 100% { transform: translate(0); }
+            33% { transform: translate(2px, -2px); }
+        }
+    </style>
+</head>
+<body>
+    <div class="scanline"></div>
+    
+    <div class="container">
+        <h1 class="glitch" data-text="Kai Kurusu">Kai Kurusu<span class="cursor"></span></h1>
+        <div class="title">Cloud Infrastructure | SecOps Engineer</div>
+        
+        <p class="bio">
+            Providing technical support for cloud infrastructure and container orchestration 
+            platforms. Specializing in security operations, container security, OS-level 
+            troubleshooting (Windows/Linux), observability, and network security. Passionate 
+            about privacy-preserving technologies, anonymization techniques, and offensive security.
+        </p>
+
+        <div class="links">
+            <a href="https://app.hackthebox.com/users/2766022" class="link-item" target="_blank" rel="noopener">
+                <svg viewBox="0 0 24 24">
+                    <path d="M12 2L2 7v10c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-10-5z"></path>
+                    <path d="M12 12l-4-2v4l4 2 4-2v-4l-4 2z"></path>
+                </svg>
+                HackTheBox
+            </a>
+
+            <a href="https://github.com/devkai4" class="link-item" target="_blank" rel="noopener">
+                <svg viewBox="0 0 24 24">
+                    <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
+                </svg>
+                GitHub
+            </a>
+
+            <a href="https://www.linkedin.com/in/kai-kurusu/" class="link-item" target="_blank" rel="noopener">
+                <svg viewBox="0 0 24 24">
+                    <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
+                    <rect x="2" y="9" width="4" height="12"></rect>
+                    <circle cx="4" cy="4" r="2"></circle>
+                </svg>
+                LinkedIn
+            </a>
+
+            <a href="mailto:kai.kurusu@linux.com" class="link-item">
+                <svg viewBox="0 0 24 24">
+                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                    <polyline points="22,6 12,13 2,6"></polyline>
+                </svg>
+                Contact
+            </a>
+        </div>
+
+        <div class="footer">
+            $ cat skills.txt | grep -iE "(infra|sec)" <br>
+            → cloud-native • container-orchestration • infrastructure-as-code • security-research
+        </div>
+    </div>
+</body>
+</html>
